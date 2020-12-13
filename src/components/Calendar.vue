@@ -20,7 +20,7 @@
                  v-bind:key="index"
 
             >
-                <div class="calendar-day-inner" v-bind:class="{today: day.isToday}"
+                <div class="calendar-day-inner" v-bind:class="{today: day.isToday, available: day.isAvailable}"
                 >
                     {{day.day}}
                 </div>
@@ -40,6 +40,7 @@
                 today: new Date()
             }
         },
+        props: ["availableDays"],
         methods: {
             getPreviousMonth() {
                 this.currentDate = new Date(this.currentDate.setMonth(this.currentDate.getMonth()-1));
@@ -59,14 +60,19 @@
                 }
                 const currentDate = getFirstDayOfWeek(firstDayOfMonth);
                 const lastDayOfMonth = getLastDayOfMonth(dayInMonth);
-                console.log(currentDate, lastDayOfMonth);
+                console.log(this.availableDays);
                 while(currentDate.getDay() !== 0 || currentDate.getTime() < lastDayOfMonth.getTime()) {
                     this.days.push({
                         day: currentDate.getDate(),
-                        isToday: isSameDays(currentDate, this.today)
+                        isToday: isSameDays(currentDate, this.today),
+                        isAvailable: this.isDayAvailable(currentDate)
                     });
                     currentDate.setDate(currentDate.getDate()+1);
-                }
+
+                } console.log(this.days)
+            },
+            isDayAvailable(dayToCheck) {
+                return this.availableDays.some(day => isSameDays(new Date(day.year, day.month-1, day.day), dayToCheck));
             }
         },
         created: function () {
@@ -173,6 +179,11 @@
         align-items: center;
         width: 100%;
         height: 100%;
+        color: lightgray;
+    }
+
+    .calendar-day-inner.available {
+        color: #787676;
     }
 
 </style>

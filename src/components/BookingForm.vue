@@ -11,7 +11,9 @@
         <img src="/assets/right-arrows.svg" height="40px"/>
         <h2>Check Out</h2>
       </div>
-      <div class="calendar-container" v-if="isCalendarVisible"><Calendar/></div>
+      <div class="calendar-container" v-if="isCalendarVisible">
+        <Calendar v-bind:availableDays="availableDays"/>
+      </div>
       <div><button class="booking-button">BOOK NOW</button></div>
     </div>
     </div>
@@ -23,7 +25,7 @@
   import Calendar from "@/components/Calendar";
   export default {
     components: {Rating, Calendar},
-    props: ["price", "rating"],
+    props: ["price", "rating", "availableDays"],
     data() {
       return {
         isCalendarVisible: false
