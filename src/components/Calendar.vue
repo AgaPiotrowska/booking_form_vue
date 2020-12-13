@@ -15,7 +15,17 @@
             <div>Sat</div>
         </div>
         <div class="calendar-days">
-            <div class="calendar-day" v-for="(day, index) in days" v-bind:key="index">{{day.day}}</div>
+            <div class="calendar-day"
+                 v-for="(day, index) in days"
+                 v-bind:key="index"
+
+            >
+                <div class="calendar-day-inner" v-bind:class="{today: day.isToday}"
+                >
+                    {{day.day}}
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
@@ -26,7 +36,8 @@
             return {
                 days: [],
                 currentMonth: null,
-                currentDate: new Date()
+                currentDate: new Date(),
+                today: new Date()
             }
         },
         methods: {
@@ -51,7 +62,8 @@
                 console.log(currentDate, lastDayOfMonth);
                 while(currentDate.getDay() !== 0 || currentDate.getTime() < lastDayOfMonth.getTime()) {
                     this.days.push({
-                        day: currentDate.getDate()
+                        day: currentDate.getDate(),
+                        isToday: isSameDays(currentDate, this.today)
                     });
                     currentDate.setDate(currentDate.getDate()+1);
                 }
@@ -61,6 +73,11 @@
             this.calculateDays(this.currentDate)
         }
     }
+    const isSameDays= (first, second) => {
+        return first.getFullYear() === second.getFullYear() && first.getMonth() === second.getMonth()
+            && first.getDate() === second.getDate()
+    }
+
    const getFirstDayOfMonth = (dayInMonth) => {
        return new Date(dayInMonth.getFullYear(), dayInMonth.getMonth(), 1);
     };
@@ -129,6 +146,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 6px;
     }
 
     .days-of-week {
@@ -143,5 +161,18 @@
         color: darkgray;
     }
 
+    .today {
+        color: #00DBB1;
+        border: 3px solid #00DBB1;
+        border-radius: 50%;
+    }
+
+    .calendar-day-inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
 
 </style>
