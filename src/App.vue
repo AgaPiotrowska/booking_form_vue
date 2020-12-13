@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <BookingForm/>
   </div>
 </template>
 

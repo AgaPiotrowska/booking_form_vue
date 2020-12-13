@@ -1,11 +1,11 @@
 <template>
-  <div>Hello</div>
+  <div>Booking form</div>
 </template>
 
 <script>
-export default {
-  components: 'BookingForm',
-}
+// export default {
+//
+// }
 </script>
 
 <style>
