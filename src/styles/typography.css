@@ -13,3 +13,7 @@ div, span, h1, h2, h3 {
 .text-small-bold {
     font-weight: bold;
 }
+
+.text-big {
+    font-size: 24px;
+}
