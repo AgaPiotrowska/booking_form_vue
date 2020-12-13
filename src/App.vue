@@ -2,7 +2,9 @@
 
 <template>
   <div id="app">
-    <BookingForm v-bind:price="129"/>
+    <BookingForm
+            v-bind:price="129"
+            v-bind:rating="{value: 2.9, count: 150}"/>
 
   </div>
 </template>

@@ -2,12 +2,12 @@
   <div class="booking-container">
     <div class="border-container">
       <h2>{{price}} zł</h2>
-      <div>star ratings</div>
+      <Rating v-bind:rating="rating"/>
       <div class="border-bottom"></div>
       <h3 class="dates">Dates</h3>
       <div class="check-container">
         <h2>Check In</h2>
-        <img src="../assets/arrow.svg"/>
+        <img src="/assets/right-arrows.svg" height="40px"/>
         <h2>Check Out</h2>
       </div>
     </div>
@@ -15,8 +15,11 @@
 </template>
 
 <script>
+  import Rating from "@/components/Rating";
   export default {
-    props: ["price"],
+    components: {Rating},
+    props: ["price", "rating"],
+
 
   }
 </script>

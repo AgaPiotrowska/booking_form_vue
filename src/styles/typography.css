@@ -5,3 +5,11 @@ div, span, h1, h2, h3 {
     padding: 0;
     box-sizing: border-box;
 }
+
+.text-small, .text-small-bold {
+    font-size: 12px;
+}
+
+.text-small-bold {
+    font-weight: bold;
+}
