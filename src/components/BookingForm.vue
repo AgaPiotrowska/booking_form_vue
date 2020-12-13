@@ -1,8 +1,8 @@
 <template>
   <div class="booking-container">
     <div class="border-container">
-      <h2>Price</h2>
-      <div>ratings</div>
+      <h2>{{price}} zł</h2>
+      <div>star ratings</div>
       <div class="border-bottom"></div>
       <h3 class="dates">Dates</h3>
       <div class="check-container">
@@ -15,12 +15,16 @@
 </template>
 
 <script>
+  export default {
+    props: ["price"],
+
+  }
 </script>
 
 <style>
 
   .booking-container {
-    height: 450px;
+    height: 650px;
     width: 450px;
     background-color: #ECECEC;
     margin: auto;
