@@ -69,6 +69,7 @@
   .check-container h2 {
     margin: 7px 15px;
     font-weight: lighter;
+    cursor: pointer;
   }
 
   .check-container img {

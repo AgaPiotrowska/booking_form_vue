@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="calendar-header">
-            <img class="calendar-arrow" src="/assets/arrow-left.svg"/>
+            <img class="calendar-arrow" src="/assets/arrow-left.svg" @click="getPreviousMonth"/>
             <div class="calendar-month text-big ">{{currentMonth.month}} {{currentMonth.year}}</div>
-            <img class="calendar-arrow" src="/assets/arrow-right.svg"/>
+            <img class="calendar-arrow" src="/assets/arrow-right.svg" @click="getNextMonth"/>
         </div>
         <div class="days-of-week">
             <div>Sun</div>
@@ -25,34 +25,48 @@
         data() {
             return {
                 days: [],
-                currentMonth: null
+                currentMonth: null,
+                currentDate: new Date()
+            }
+        },
+        methods: {
+            getPreviousMonth() {
+                this.currentDate = new Date(this.currentDate.setMonth(this.currentDate.getMonth()-1));
+                this.calculateDays(this.currentDate)
+            },
+            getNextMonth() {
+                this.currentDate = new Date(this.currentDate.setMonth(this.currentDate.getMonth()+1));
+                this.calculateDays(this.currentDate)
+            },
+
+            calculateDays(dayInMonth) {
+                this.days = [];
+                const firstDayOfMonth = getFirstDayOfMonth(dayInMonth);
+                this.currentMonth = {
+                    month: monthNames[firstDayOfMonth.getMonth()],
+                    year: firstDayOfMonth.getFullYear()
+                }
+                const currentDate = getFirstDayOfWeek(firstDayOfMonth);
+                const lastDayOfMonth = getLastDayOfMonth(dayInMonth);
+                console.log(currentDate, lastDayOfMonth);
+                while(currentDate.getDay() !== 0 || currentDate.getTime() < lastDayOfMonth.getTime()) {
+                    this.days.push({
+                        day: currentDate.getDate()
+                    });
+                    currentDate.setDate(currentDate.getDate()+1);
+                }
             }
         },
         created: function () {
-            const firstDayOfMonth = getFirstDayOfMonth();
-            this.currentMonth = {
-                month: monthNames[firstDayOfMonth.getMonth()],
-                year: firstDayOfMonth.getFullYear()
-            }
-            const currentDate = getFirstDayOfWeek(firstDayOfMonth);
-            const lastDayOfMonth = getLastDayOfMonth();
-            console.log(currentDate, lastDayOfMonth);
-            while(currentDate.getDay() !== 0 || currentDate.getTime() < lastDayOfMonth.getTime()) {
-                this.days.push({
-                    day: currentDate.getDate()
-                });
-                currentDate.setDate(currentDate.getDate()+1);
-            }
+            this.calculateDays(this.currentDate)
         }
     }
-   const getFirstDayOfMonth = () => {
-       const now = new Date();
-       return new Date(now.getFullYear(), now.getMonth(), 1);
+   const getFirstDayOfMonth = (dayInMonth) => {
+       return new Date(dayInMonth.getFullYear(), dayInMonth.getMonth(), 1);
     };
 
-    const getLastDayOfMonth = () => {
-        const now = new Date();
-        return new Date(now.getFullYear(), now.getMonth()+1, 0);
+    const getLastDayOfMonth = (dayInMonth) => {
+        return new Date(dayInMonth.getFullYear(), dayInMonth.getMonth()+1, 0);
     }
 
     const getFirstDayOfWeek = (date) => {
@@ -82,6 +96,7 @@
         height: 20px;
         margin-left: 20px;
         margin-right: 20px;
+        cursor: pointer;
     }
 
     .calendar-month {
