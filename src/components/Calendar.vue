@@ -20,10 +20,20 @@
                  v-bind:key="index"
                  @click="selectDay(day)"
             >
-                <div class="calendar-day-inner"
-                     v-bind:class="{today: day.isToday, available: day.isAvailable, start: day.isStart, end: day.isEnd}"
+                <div class="calendar-day-background"
+                     v-bind:class="{
+                    today: day.isToday,
+                     available: day.isAvailable,
+                     start: day.isStart,
+                     end: day.isEnd,
+                     between: day.isBetween
+                     }"
                 >
-                    {{day.day}}
+                    <div class="calendar-day-inner"
+
+                    >
+                        {{day.day}}
+                    </div>
                 </div>
 
             </div>
@@ -40,12 +50,16 @@
                 currentDate: new Date(),
                 today: new Date(),
                 startDate: null,
-                endDate: null
+                endDate: null,
+                availableDaysFilter: []
             }
         },
         props: ["availableDays"],
         methods: {
             selectDay(day) {
+                if (this.startDate != null && day.fullDate.getTime() < this.startDate.getTime()) {
+                    this.startDate = null
+                }
                 if (this.startDate != null && this.endDate === null) {
                     this.endDate = new Date(day.fullDate);
                 } else {
@@ -64,7 +78,33 @@
                 this.calculateDays(this.currentDate)
             },
 
+            countLastDayInRange() {
+                if (this.startDate == null) {
+                    return null;
+                }
+
+                const currentDate = new Date(this.startDate);
+                currentDate.setDate(currentDate.getDate() + 1);
+
+                for (let i = 0; i < this.availableDays.length; i++) {
+                    if (!this.isDayAvailable(currentDate)) {
+                        return currentDate;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return null;
+            },
+
             calculateDays(dayInMonth) {
+                const lastDayInRange = this.countLastDayInRange();
+                if (lastDayInRange == null) {
+                    this.availableDaysFilter = [...this.availableDays];
+                } else {
+                    this.availableDaysFilter = this.availableDays.filter(d => {
+                        return new Date(d.year, d.month - 1, d.day).getTime() < lastDayInRange.getTime();
+                    })
+                }
+
                 this.days = [];
                 const firstDayOfMonth = getFirstDayOfMonth(dayInMonth);
                 this.currentMonth = {
@@ -80,20 +120,29 @@
                         isToday: isSameDays(currentDate, this.today),
                         isAvailable: this.isDayAvailable(currentDate),
                         isStart: isSameDays(currentDate, this.startDate),
-                        isEnd: isSameDays(currentDate, this.endDate)
+                        isEnd: isSameDays(currentDate, this.endDate),
+                        isBetween: isBetween(this.startDate, this.endDate, currentDate)
                     });
                     currentDate.setDate(currentDate.getDate() + 1);
 
                 }
             },
             isDayAvailable(dayToCheck) {
-                return this.availableDays.some(day => isSameDays(new Date(day.year, day.month - 1, day.day), dayToCheck));
+                return this.availableDaysFilter.some(day => isSameDays(new Date(day.year, day.month - 1, day.day), dayToCheck));
             }
         },
         created: function () {
             this.calculateDays(this.currentDate)
         }
     }
+
+    const isBetween = (start, end, day) => {
+        if (start == null || end == null) {
+            return false;
+        }
+        return day.getTime() > start.getTime() && day.getTime() < end.getTime() && !isSameDays(start, day) && !isSameDays(end, day)
+    }
+
     const isSameDays = (first, second) => {
         if (first === null || second === null) {
             return false
@@ -170,7 +219,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 6px;
     }
 
     .days-of-week {
@@ -191,7 +239,7 @@
         border-radius: 50%;
     }
 
-    .calendar-day-inner {
+    .calendar-day-inner, .calendar-day-background {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -200,15 +248,30 @@
         color: lightgray;
     }
 
-    .calendar-day-inner.available {
+    .available .calendar-day-inner {
         color: #787676;
         cursor: pointer;
     }
 
-    .start, .end {
+    .start .calendar-day-inner, .end .calendar-day-inner {
         background-color: #00DBB1;
         color: white !important;
         border-radius: 50%;
+    }
+
+    .start {
+        border-radius: 50% 0 0 50%;
+        background-color: #C3FEF8;
+    }
+
+    .end {
+        border-radius: 0 50% 50% 0;
+        background-color: #C3FEF8;
+    }
+
+    .between .calendar-day-inner {
+        background-color: #C3FEF8;
+        color: #6EEAD1;
     }
 
 </style>
