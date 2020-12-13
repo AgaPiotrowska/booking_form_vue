@@ -12,7 +12,7 @@
         <h2>Check Out</h2>
       </div>
       <div class="calendar-container" v-if="isCalendarVisible"><Calendar/></div>
-      <div><button class="booking-button">REZERWUJ</button></div>
+      <div><button class="booking-button">BOOK NOW</button></div>
     </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
     <div>
         <div class="calendar-header">
             <img class="calendar-arrow" src="/assets/arrow-left.svg"/>
-            <div class="calendar-month text-big ">Calendar</div>
+            <div class="calendar-month text-big ">{{currentMonth.month}} {{currentMonth.year}}</div>
             <img class="calendar-arrow" src="/assets/arrow-right.svg"/>
         </div>
         <div class="days-of-week">
@@ -24,11 +24,17 @@
     export default {
         data() {
             return {
-                days: []
+                days: [],
+                currentMonth: null
             }
         },
         created: function () {
-            const currentDate = getFirstDayOfWeek(getFirstDayOfMonth());
+            const firstDayOfMonth = getFirstDayOfMonth();
+            this.currentMonth = {
+                month: monthNames[firstDayOfMonth.getMonth()],
+                year: firstDayOfMonth.getFullYear()
+            }
+            const currentDate = getFirstDayOfWeek(firstDayOfMonth);
             const lastDayOfMonth = getLastDayOfMonth();
             console.log(currentDate, lastDayOfMonth);
             while(currentDate.getDay() !== 0 || currentDate.getTime() < lastDayOfMonth.getTime()) {
@@ -56,6 +62,10 @@
         }
         return currentDate;
     }
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
 </script>
 
 <style>
