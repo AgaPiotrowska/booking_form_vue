@@ -9,4 +9,4 @@ Tasks to finish:
 -unit tests
 
 
-See live at: https://booking-component-vue.netlify.app/ 
+See live at: https://vue-bookingform.netlify.app/
