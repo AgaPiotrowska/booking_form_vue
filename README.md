@@ -1,6 +1,6 @@
-Booking component built in Vue.js
+Booking component  built in Vue.js
 
-Tasks to finish:
+Tasks to finish: 
 
 -add funtion to block the the possibility to choose unavailable dates once start date is chosen
 
@@ -8,4 +8,5 @@ Tasks to finish:
 
 -unit tests
 
-See live at: https://booking-component-vue.netlify.app/
+
+See live at: https://vue-bookingform.netlify.app/

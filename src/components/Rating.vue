@@ -14,18 +14,22 @@
         },
         props: ["rating"],
         created: function () {
+            this.rating.value = Math.max(0, Math.min(this.rating.value, 5));
             const fullNumber = Math.floor(this.rating.value);
             const fraction = this.rating.value - fullNumber;
             for (let i = 0; i < fullNumber; i++) {
                 this.stars.push("/assets/star-full.svg");
             }
-            if (fraction < 0.2) {
-                this.stars.push("/assets/star-empty.svg")
-            } else if (fraction < 0.8) {
-                this.stars.push("/assets/star-half.svg")
-            } else {
-                this.stars.push("/assets/star-full.svg")
+            if (fraction !== 0) {
+                if (fraction < 0.2) {
+                    this.stars.push("/assets/star-empty.svg")
+                } else if (fraction < 0.8) {
+                    this.stars.push("/assets/star-half.svg")
+                } else {
+                    this.stars.push("/assets/star-full.svg")
+                }
             }
+
             for (let i = this.stars.length; i < 5; i++) {
                 this.stars.push("/assets/star-empty.svg")
             }
