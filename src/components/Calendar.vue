@@ -48,15 +48,15 @@
         data() {
             return {
                 days: [],
+                currentDate: null,
                 currentMonth: null,
-                currentDate: new Date(),
-                today: new Date(),
                 startDate: null,
                 endDate: null,
+                today: null,
                 availableDaysFilter: []
             }
         },
-        props: ["availableDays"],
+        props: ["availableDays", "startCurrentDate", "todayInput"],
         methods: {
             selectDay(day) {
                 if (this.startDate != null && day.fullDate.getTime() < this.startDate.getTime()) {
@@ -134,6 +134,8 @@
             }
         },
         created: function () {
+            this.currentDate = this.startCurrentDate == null? new Date() : new Date(this.startCurrentDate);
+            this.today = this.todayInput == null? new Date() : new Date(this.todayInput);
             this.calculateDays(this.currentDate)
         }
     }
