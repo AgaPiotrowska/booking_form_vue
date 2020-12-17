@@ -30,10 +30,11 @@
 <script>
 import BookingForm from './components/BookingForm.vue'
 
+
 export default {
   name: 'App',
   components: {
-    BookingForm
+    BookingForm,
   },
   data() {
     return {
