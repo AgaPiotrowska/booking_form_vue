@@ -7,12 +7,22 @@
       <div class="border-bottom"></div>
       <h3 class="dates">Dates</h3>
       <div class="check-container">
-        <h2 @click="isCalendarVisible=true">Check In</h2>
-        <img src="/assets/right-arrows.svg" height="40px"/>
-        <h2>Check Out</h2>
+        <h2 @click="isCalendarVisible=true">
+          <div v-if="startDateFormatted === null">Check In</div>
+          <div v-if="startDateFormatted !== null">{{startDateFormatted.day}}.{{startDateFormatted.month}}</div>
+        </h2>
+        <img src="/assets/right-arrows.svg" height="40px" style="flex-grow: 1"/>
+        <h2>
+          <div v-if="endDateFormatted === null">Check Out</div>
+          <div v-if="endDateFormatted !== null">{{endDateFormatted.day}}.{{endDateFormatted.month}}</div>
+        </h2>
       </div>
       <div class="calendar-container" v-if="isCalendarVisible">
-        <Calendar v-bind:availableDays="availableDays"/>
+        <Calendar
+                v-bind:availableDays="availableDays"
+                v-on:startDate="setStartDate"
+                v-on:endDate="setEndDate"
+        />
       </div>
       <div><button class="booking-button">BOOK NOW</button></div>
     </div>
@@ -28,11 +38,34 @@
     props: ["price", "rating", "availableDays"],
     data() {
       return {
-        isCalendarVisible: false
+        isCalendarVisible: false,
+        startDateFormatted: null,
+        endDateFormatted: null
+      }
+    },
+    methods: {
+      setStartDate(date){
+        if(date == null) {
+          this.startDateFormatted = null}
+        const prefixDate = (date.getDate() < 10 ? "0" : "")
+        const prefixMonth = (date.getMonth() < 10 ? "0" : "")
+        this.startDateFormatted= {
+          day: prefixDate + date.getDate(),
+          month: prefixMonth + (date.getMonth()+1)
+        }
+
+  },
+      setEndDate(date){
+        if(date == null) {
+          this.endDateFormatted = null}
+        const prefixDate = (date.getDate() < 10 ? "0" : "")
+        const prefixMonth = (date.getMonth() < 10 ? "0" : "")
+        this.endDateFormatted= {
+          day: prefixDate + date.getDate(),
+          month: prefixMonth + (date.getMonth()+1)
+        }
       }
     }
-
-
   }
 </script>
 
