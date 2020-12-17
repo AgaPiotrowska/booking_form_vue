@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="calendar-header">
-            <img class="calendar-arrow" src="/assets/arrow-left.svg" @click="getPreviousMonth"/>
+            <img class="calendar-arrow-left" src="/assets/arrow-left.svg" @click="getPreviousMonth"/>
             <div class="calendar-month text-big ">{{currentMonth.month}} {{currentMonth.year}}</div>
-            <img class="calendar-arrow" src="/assets/arrow-right.svg" @click="getNextMonth"/>
+            <img class="calendar-arrow-right" src="/assets/arrow-right.svg" @click="getNextMonth"/>
         </div>
         <div class="days-of-week">
             <div>Sun</div>
@@ -20,6 +20,7 @@
                  v-bind:key="index"
                  @click="selectDay(day)"
             >
+
                 <div class="calendar-day-background"
                      v-bind:class="{
                     today: day.isToday,
@@ -30,10 +31,11 @@
                      }"
                 >
                     <div class="calendar-day-inner"
-
                     >
                         {{day.day}}
                     </div>
+                    <div class="border-right" v-if="day.isStart || day.isBetween"></div>
+                    <div class="border-left" v-if="day.isEnd || day.isBetween"></div>
                 </div>
 
             </div>
@@ -182,7 +184,7 @@
         justify-content: center;
     }
 
-    .calendar-arrow {
+    .calendar-arrow-left, .calendar-arrow-right {
         height: 20px;
         margin-left: 20px;
         margin-right: 20px;
@@ -200,6 +202,7 @@
         grid-template-columns: repeat(7, 1fr);
         grid-template-rows: repeat(6, 1fr);
         gap: 0px 0px;
+        padding: 6px;
     }
 
     .calendar-days::before {
@@ -219,6 +222,24 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 6px;
+        position: relative;
+    }
+
+    .border-right, .border-left {
+        position: absolute;
+        background-color: #C3FEF8;
+        top: 6px;
+        width: 6px;
+        bottom: 6px;
+    }
+
+    .border-right {
+        right: 0;
+    }
+
+    .border-left {
+        left: 0;
     }
 
     .days-of-week {
