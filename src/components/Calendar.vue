@@ -59,15 +59,21 @@
         props: ["availableDays", "startCurrentDate", "todayInput"],
         methods: {
             selectDay(day) {
+                if(!day.isAvailable) {
+                    return
+                }
                 if (this.startDate != null && day.fullDate.getTime() < this.startDate.getTime()) {
                     this.startDate = null
                 }
                 if (this.startDate != null && this.endDate === null) {
                     this.endDate = new Date(day.fullDate);
+                    this.$emit("endDate",this.endDate)
                 } else {
                     this.endDate = null;
                     this.startDate = new Date(day.fullDate)
+                    this.$emit("startDate",this.startDate)
                 }
+
                 this.calculateDays(this.currentDate)
             },
 
@@ -81,7 +87,7 @@
             },
 
             countLastDayInRange() {
-                if (this.startDate == null) {
+                if (this.startDate == null || this.endDate !=null) {
                     return null;
                 }
 
